@@ -13,36 +13,62 @@ import Order from './pages/order';
 import Payment from './pages/payment';
 import Profile from './pages/profile';
 import { TouchableOpacity} from 'react-native';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth,db } from './config/firebase';
+import { useState } from 'react';
+
 
 
 
 function HomeScreen({navigation}) {
-  const handleSignIn=()=>(
-   navigation.navigate('landingPage')
+  // const handleSignIn=()=>(
+  //  navigation.navigate('landingPage')
+  // )
+  const[email,setEmail]=useState('');
+  const[password,setPassword]=useState('')
+
+  const handleSignIn=(()=>
+  {
+     
+  signInWithEmailAndPassword(auth,email,password).then((userCredential)=>
+  {
+      const user = userCredential.user;
+      navigation.navigate('landingPage')
+     
+  }).catch((error)=>{
+      console.log(error)
+  })        
+     
+       }
+ 
   )
+
+
   return (
     <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
       <View style={{ width: '100%', height: '50%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
         <Image source={image} style={styles.logo} />
       </View>
 
-      <View style={{ width: '100%', height: "50%", backgroundColor: "#2B2C34", borderTopEndRadius: 21, borderTopStartRadius: 21 }}>
+      <View style={{ width: '100%', height: "50%", backgroundColor: "#ADD8E6", borderTopEndRadius: 21, borderTopStartRadius: 21 }}>
         <Text style={styles.signIn} >Sign In</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Email Adress" />
+          style={styles.input} value={email}
+          placeholder="Email Adress" 
+          onChangeText={text => setEmail(text)}/>
 
         <TextInput
-          style={styles.input}
-          placeholder="Password" />
-        <Text style={{ color: "white", textAlign: 'center', margin: 10 }} onPress={()=>navigation.navigate('Register')}>Don't Have Account?</Text>
+          style={styles.input} value={password}
+          placeholder="Password" 
+          onChangeText={text => setPassword(text)}/>
+        <Text style={{ color: "black", textAlign: 'center', margin: 10 }} onPress={()=>navigation.navigate('Register')}>Don't Have Account?</Text>
 
-        <Text style={{ color: "white", textAlign: 'center', margin: 10 }} onPress={()=>navigation.navigate('forgotPassword')}>Forgot Password?</Text>
+        <Text style={{ color: "black", textAlign: 'center', margin: 10 }} onPress={()=>navigation.navigate('forgotPassword')}>Forgot Password?</Text>
 
         <TouchableOpacity style={{
-          backgroundColor: '#E85800',textAlign: 'center',padding: 7,marginTop: 10,width: "50%",textAlign: 'center',borderRadius: 5,alignSelf:'center'
+          backgroundColor: '#EDEADE',textAlign: 'center',padding: 7,marginTop: 10,width: "50%",textAlign: 'center',borderRadius: 5,alignSelf:'center'
         }}>
-          <Text style={{color: 'white'}} onPress={handleSignIn}>Sign In</Text>
+          <Text style={{color: 'black'}} onPress={handleSignIn}>Sign In</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -83,7 +109,7 @@ const styles = StyleSheet.create({
     height: 200
   },
   signIn: {
-    color: "white",
+    color: "black",
     textAlign: "center",
     fontSize: 20,
     fontWeight:"500",
@@ -91,7 +117,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width:"90%",
-    color: "white",
+    color: "black",
     borderWidth: 5,
     padding: 10,
     margin: 3,
